@@ -3,7 +3,7 @@ const router = require('express').Router();
 
 // load stats page
 router.get('/stats', (req, res) => {
-  res.sendFile(path.join(__dirname, '../pulic/stats.html'));
+  res.sendFile(path.join(__dirname, '../public/stats.html'));
 });
 
 // load excercise page
