@@ -1,13 +1,14 @@
-module.exports = (app, _root) => {
-  app.get("/", (req, res) => {
-    res.sendFile(`${_root}/public/index.html`);
-  });
+const path = require('path');
+const router = require('express').Router();
 
-  app.get("/stats", (req, res) => {
-    res.sendFile(`${_root}/public/stats.html`);
-  });
+// load stats page
+router.get('/stats', (req, res) => {
+  res.sendFile(path.join(__dirname, '../pulic/stats.html'));
+});
 
-  app.get("/excercise", (req, res) => {
-    res.sendFile(`${_root}/public/excercise.html`);
-  });
-};
+// load excercise page
+router.get('/exercise', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/exercise.html'));
+});
+
+module.exports = router;

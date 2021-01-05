@@ -1,44 +1,57 @@
-const ExcerciseController = require("../controllers/exerciseController");
-const WorkoutController = require("../controllers/workoutController");
-const { response } = require("express");
+const router = require('express').Router();
+const Workout = require('../models/workout');
 
-// controller objects
-const workout = new WorkoutController();
-const excercise = new ExcerciseController();
-
-function createExerciseType(body, cb) {
-  if (body.type === "resistance") {
-    excercise.createResistanceExcercise(body, (response) => {
-      cb(response);
+// corresponding GET request to /api/workouts
+router.get('/api/workouts', (req, res) => {
+  Workout.find({})
+    .then((result) => {
+      console.log(`Result: ${result}`);
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(`ERROR: ${err}`);
+      res.status(500).json(err);
     });
-  }
-}
+});
 
-mondule.exports = (app) => {
-  app.get("api/workouts", (req, res) => {
-    workout.readAllWorkoutsPopulated((response) => {
-      console.log(response);
-      res.json(response);
+// corresponding POST request to /api/workouts
+router.post('/api/workouts', ({ body }, res) => {
+  Workout.create(body)
+    .then((result) => {
+      console.log(`Result: ${result}`);
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(`ERROR: ${err}`);
+      res.status(500).json(err);
     });
-  });
+});
 
-  app.put("/api/workout/:id", (req, res) => {
-    createExerciseType(req.body, (excercise) => {
-      workout.insertExercise(req.params.id, exercise, (response) => {
-        res.json(response);
-      });
+// corresponding GET request to /api/workouts/range
+router.get('/api/workouts/range', (req, res) => {
+  Workout.find({})
+    .limit(7)
+    .then((result) => {
+      console.log(`Result: ${result}`);
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(`ERROR: ${err}`);
+      res.status(500).json(err);
     });
-  });
+});
 
-  app.post("/api/workouts", (req, res) => {
-    workout.createWorkout((response) => {
-      res.json(response);
+// corresponding PUT request to /api/workouts/:id
+router.put('/api/workouts/:id', ({ params, body }, res) => {
+  Workout.findByIdAndUpdate(params.id, { $push: { exercises: body } })
+    .then((result) => {
+      console.log(`Result: ${result}`);
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(`ERROR: ${err}`);
+      res.json(err);
     });
-  });
+});
 
-  app.get("/api/workouts/range", (req, res) => {
-    workout.readAllWorkoutsPopulated((response) => {
-      res.json(response);
-    });
-  });
-};
+module.exports = router;
