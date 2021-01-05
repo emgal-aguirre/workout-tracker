@@ -1,26 +1,27 @@
-const express = require("express");
-const mongoose = require("mongoose");
+const express = require('express');
+const mongoose = require('mongoose');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
 
 //database connection
 mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+  .connect(process.env.MONGODB_URI || 'mongodb://localhost/workout', {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: false,
   })
   .then((connection) => {
-    console.log("connection made");
+    console.log('connection made');
   });
 
-//middlewear
-app.use(express.static("public"));
+app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-require("./routes/apiRoutes")(app);
-require("./routes/htmlRoutes")(app, __dirname);
+app.use(require('./routes/apiRoutes.js'));
+app.use(require('./routes/htmlRoutes.js'));
 
 app.listen(PORT, () => {
-  console.log("App is running on port ${PORT}!");
+  console.log('App is running on port ${PORT}!');
 });
